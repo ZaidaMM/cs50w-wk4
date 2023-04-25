@@ -119,4 +119,12 @@ def remove_from_watchlist(request, listing_id):
     listing_content = Listing.objects.get(pk=listing_id)
     current_user = request.user
     listing_content.watchlist.remove(current_user)
-    return HttpResponseRedirect(reverse('listing', args=(listing_id, )))     
+    return HttpResponseRedirect(reverse('listing', args=(listing_id, )))   
+
+def watchlist(request):
+    current_user = request.user
+    listing_content = current_user.watchlistListing.all()
+    return render(request, 'auctions/watchlist.html', {
+        "listings": listing_content
+    }) 
+   

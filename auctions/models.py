@@ -19,7 +19,7 @@ class Listing(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="user")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, related_name="category")
     is_active = models.BooleanField(default=True)
-    watchlist = models.ManyToManyField(User, blank=True, related_name="listing")
+    watchlist = models.ManyToManyField(User, blank=True, related_name="watchlistListing")
 
     def __str__(self):
         return f"{self.title}"
