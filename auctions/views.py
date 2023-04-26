@@ -92,7 +92,6 @@ def new_listing(request):
                 image_url=image_url,
                 category=category,
                 owner = current_user
-
             )
 
             # Save new listing
@@ -110,15 +109,15 @@ def listing(request, listing_id):
     })
 
 def add_to_watchlist(request, listing_id):
-    listing_content = Listing.objects.get(pk=listing_id)
+    listing = Listing.objects.get(pk=listing_id)
     current_user = request.user
-    listing_content.watchlist.add(current_user)
+    listing.watchlist.add(current_user)
     return HttpResponseRedirect(reverse("listing", args=(listing_id, )))
        
 def remove_from_watchlist(request, listing_id):
-    listing_content = Listing.objects.get(pk=listing_id)
+    listing = Listing.objects.get(pk=listing_id)
     current_user = request.user
-    listing_content.watchlist.remove(current_user)
+    listing.watchlist.remove(current_user)
     return HttpResponseRedirect(reverse('listing', args=(listing_id, )))   
 
 def watchlist(request):
