@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Listing
+from .models import User, Category, Listing, Bid
 from .forms import NewListingForm
 
 
@@ -84,11 +84,17 @@ def new_listing(request):
             # Get the user
             current_user = request.user
 
+            # Create new bid object
+            bid = Bid(bid=float(price), user=current_user)
+
+            # Save new bid
+            bid.save()
+
             # Create new listing object
             new_listing = Listing(
                 title=title,
                 description=description,
-                price=price,
+                price=bid.bid,
                 image_url=image_url,
                 category=category,
                 owner = current_user
@@ -126,4 +132,6 @@ def watchlist(request):
     return render(request, 'auctions/watchlist.html', {
         "listings": listing_content
     }) 
-   
+
+def bid(request):
+    pass  

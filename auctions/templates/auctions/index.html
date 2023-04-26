@@ -8,7 +8,7 @@
       <div class="card-body">
         <h3 lass="card-title">{{ listing.title }}</h3>
         <p lass="card-text">{{ listing.description}}</p>
-        <h4>£{{ listing.price }}</h4>
+        <h4>£{{ listing.price.bid }}</h4>
         <a href="{% url 'listing' listing.id %}" class="btn btn btn-success">
           Details
         </a>
