@@ -19,7 +19,7 @@
       value="Add to Watchlist"
     />
   </form>
-  {% endif %} {% endif %}
+  {% endif %}
 
   <div class="thumb">
     <img
@@ -35,21 +35,25 @@
   <p class="small">
     XX bid(s) so far. Your bid is the current bid. (Placeholder)
   </p>
-
-  {% if user.is_authenticated %}
+  {% if listing.is_active%} {% if message %} {%if updated%}
+  <div>
+    <div class="alert alert-success">{{ message }}</div>
+    {% else %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endif %} {% endif %} {% endif %}
+  </div>
   <form action="{% url 'new_bid' listing.id %}" method="POST">
     {% csrf_token %}
     <input
       type="number"
-      min="{{listing.price.bid}}"
       name="new_bid"
       placeholder="Place your Bid"
       class="form-control mb-2"
+      min="0"
       value="{{listing.price.bid}}"
     />
     <input type="submit" class="btn btn-primary btn-sm mb-4" />
   </form>
-  {% endif %}
 
   <h3>Details</h3>
   <ul>
@@ -59,5 +63,6 @@
       Category Listed {%endif%}
     </li>
   </ul>
+  {% endif %}
 </div>
 {% endblock %}

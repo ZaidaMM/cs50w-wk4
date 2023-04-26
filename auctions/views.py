@@ -136,18 +136,24 @@ def watchlist(request):
 def new_bid(request, listing_id):
     new_bid = request.POST.get('new_bid')
     listing = Listing.objects.get(pk=listing_id)
-    # current_user = request.user
-    # isListingInWatchList = current_user in listing.watchlist.all()
+    current_user = request.user
+    isListingInWatchList = request.user in listing.watchlist.all()
     if int(new_bid) > listing.price.bid:
-        updated_bid = Bid(bid = new_bid, user=request.user)
+        updated_bid = Bid(bid = int(new_bid), user=current_user)
         updated_bid.save()
-        listing.price.bid = updated_bid.bid
+        listing.price = updated_bid
         listing.save()
-        print(new_bid, listing.price)
+        # return HttpResponseRedirect(reverse('index'))
         return render(request, 'auctions/listing.html', {
-            'listing': listing,
+            "listing": listing,
+            "message": "Bid successful!",
+            "updated": True,
+            "isListingInWatchList": isListingInWatchList
         })
-    # else:
-    #     return render(request, "auctions/listing.html", {
-    #         "message": "Please submit a valid bid."
-    #     })
+    else:
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "message": "Please submit a valid bid.",
+            "updated": False,
+            "isListingInWatchList": isListingInWatchList
+        })
