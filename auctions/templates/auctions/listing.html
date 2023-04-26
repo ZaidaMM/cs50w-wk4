@@ -30,16 +30,27 @@
     />
   </div>
   <p>{{ listing.description}}</p>
-  <h4>£{{ listing.price }}</h4>
+  <h4>£{{ listing.price.bid }}</h4>
 
-  <form>
+  <p class="small">
+    XX bid(s) so far. Your bid is the current bid. (Placeholder)
+  </p>
+
+  {% if user.is_authenticated %}
+  <form action="{% url 'new_bid' listing.id %}" method="POST">
     {% csrf_token %}
-    <label for="bid" class="small"
-      >XX bid(s) so far. Your bid is the current bid. (Placeholder)</label
-    >
-    <input type="text" name="bid" placeholder="Bid" class="form-control mb-2" />
+    <input
+      type="number"
+      min="{{listing.price.bid}}"
+      name="new_bid"
+      placeholder="Place your Bid"
+      class="form-control mb-2"
+      value="{{listing.price.bid}}"
+    />
     <input type="submit" class="btn btn-primary btn-sm mb-4" />
   </form>
+  {% endif %}
+
   <h3>Details</h3>
   <ul>
     <li>Listed by: <span class="text-primary">{{user}}</span></li>

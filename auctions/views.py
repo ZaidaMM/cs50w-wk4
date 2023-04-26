@@ -133,5 +133,21 @@ def watchlist(request):
         "listings": listing_content
     }) 
 
-def bid(request):
-    pass  
+def new_bid(request, listing_id):
+    new_bid = request.POST.get('new_bid')
+    listing = Listing.objects.get(pk=listing_id)
+    # current_user = request.user
+    # isListingInWatchList = current_user in listing.watchlist.all()
+    if int(new_bid) > listing.price.bid:
+        updated_bid = Bid(bid = new_bid, user=request.user)
+        updated_bid.save()
+        listing.price.bid = updated_bid.bid
+        listing.save()
+        print(new_bid, listing.price)
+        return render(request, 'auctions/listing.html', {
+            'listing': listing,
+        })
+    # else:
+    #     return render(request, "auctions/listing.html", {
+    #         "message": "Please submit a valid bid."
+    #     })
