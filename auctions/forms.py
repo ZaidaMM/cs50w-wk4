@@ -18,7 +18,7 @@ class NewListingForm(forms.Form):
           "placeholder": "Description", 
           "class":"form-control"
         }))
-    price = forms.DecimalField(       
+    starting_bid = forms.DecimalField(       
         label="Price £",
         required=True,
         widget=forms.TimeInput(attrs={

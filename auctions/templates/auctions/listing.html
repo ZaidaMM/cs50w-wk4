@@ -1,26 +1,40 @@
 {% extends 'auctions/layout.html' %} {% block body %}
 <div class="container-fluid">
-  <h2>Listing: {{ listing }}</h2>
-  {% if user.is_authenticated %} {% if isListingInWatchList %}
-  <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
-    {% csrf_token %}
-    <input
-      type="submit"
-      class="btn btn-warning btn-sm my-2"
-      value="Remove from Watchlist"
-    />
-  </form>
-  {% else %}
-  <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
-    {% csrf_token %}
-    <input
-      type="submit"
-      class="btn btn-primary btn-sm my-2"
-      value="Add to Watchlist"
-    />
-  </form>
-  {% endif %}
+  {% if not listing.is_active and user == listing.starting_bid.user %}
+  <div class="alert alert-success">Congratulations! You won this Auction.</div>
 
+  {% endif %}
+  <h2>Listing: {{ listing }}</h2>
+  <div class="d-flex">
+    {% if user.is_authenticated %} {% if isListingInWatchList %}
+    <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
+      {% csrf_token %} {% if listing.is_active %}
+      <input
+        type="submit"
+        class="btn btn-warning btn-sm m-2"
+        value="Remove from Watchlist"
+      />{% endif %}
+    </form>
+    {% else %}
+    <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
+      {% csrf_token %}
+      <input
+        type="submit"
+        class="btn btn-primary btn-sm m-2"
+        value="Add to Watchlist"
+      />
+    </form>
+    {% endif %} {% if isOwner and listing.is_active %}
+    <form action="{% url 'close_bid' listing.id %}" method="POST">
+      {% csrf_token %}
+      <input
+        type="submit"
+        class="btn btn-danger btn-sm my-2"
+        value="Close Bid"
+      />
+    </form>
+    {% endif %}
+  </div>
   <div class="thumb">
     <img
       src="{{ listing.image_url }}"
@@ -30,10 +44,11 @@
     />
   </div>
   <p>{{ listing.description}}</p>
-  <h4>£{{ listing.price.bid }}</h4>
+  <h4>£{{ listing.starting_bid.bid }}</h4>
 
   <p class="small">
-    XX bid(s) so far. Your bid is the current bid. (Placeholder)
+    {{ listing.bid_counter}} bid(s) so far. Your bid is the current bid.
+    (Placeholder)
   </p>
   {% if listing.is_active%} {% if message %} {%if updated%}
   <div>
@@ -50,11 +65,30 @@
       placeholder="Place your Bid"
       class="form-control mb-2"
       min="0"
-      value="{{listing.price.bid}}"
+      value="{{listing.starting_bid}}"
     />
     <input type="submit" class="btn btn-primary btn-sm mb-4" />
   </form>
-
+  {% endif %}
+  <h4>Comments:</h4>
+  {% if listing.is_active%}
+  <form action="{% url 'new_comment' listing.id %}" method="POST">
+    {% csrf_token %}
+    <input
+      type="text"
+      name="new_comment"
+      placeholder="Enter your comment"
+      class="form-control mb-2"
+      value="{{listing.comment}}"
+    />
+    <input type="submit" class="btn btn-primary btn-sm mb-4" />
+  </form>
+  {{listing.comment}} {% endif %} {% for comment in comments %}
+  <div class="card">
+    <p>{{ comment.listingComment }}</p>
+    <p>By {{ comment.author }}</p>
+  </div>
+  {% endfor %}
   <h3>Details</h3>
   <ul>
     <li>Listed by: <span class="text-primary">{{user}}</span></li>
@@ -63,6 +97,5 @@
       Category Listed {%endif%}
     </li>
   </ul>
-  {% endif %}
 </div>
 {% endblock %}
