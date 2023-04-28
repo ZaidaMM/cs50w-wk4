@@ -6,10 +6,10 @@ class User(AbstractUser):
     pass
 
 class Category(models.Model):
-    categoryName = models.CharField(max_length=64)
+    category_name = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"{self.categoryName}"
+        return f"{self.category_name}"
     
 class Bid(models.Model):
     bid = models.IntegerField(default=0)
@@ -35,4 +35,4 @@ class Comment(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, related_name="listingComment")
 
     def __str__(self):
-        return f"{self.user}: {self.text}"
+        return f"{self.author}: {self.text}"

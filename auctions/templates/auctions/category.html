@@ -1,0 +1,17 @@
+{% extends 'auctions/layout.html' %} {% block body %}
+<div class="container-fluid">
+  <h2>Categories</h2>
+  <form action="{% url 'category' %}" method="POST">
+    {% csrf_token %}
+    <ul>
+      {% for category in categories %} {% if category %}
+      <li>
+        <a href="{% url 'listingsByCategory' category %}">{{category}}</a>
+      </li>
+      {% else %}
+      <p>No categories available</p>
+      {% endif %} {% endfor %}
+    </ul>
+  </form>
+</div>
+{% endblock %}

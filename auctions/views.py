@@ -106,12 +106,13 @@ def new_listing(request):
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     isListingInWatchlist = request.user in listing.watchlist.all()
+    comments = Comment.objects.filter(listing = listing)
     isOwner = request.user.username == listing.owner.username
     return render(request, "auctions/listing.html", {
         "listing":listing,
         "isListingInWatchList":isListingInWatchlist,
         "isOwner": isOwner,
-
+        "comments": comments
     })
 
 def add_to_watchlist(request, listing_id):
@@ -178,7 +179,7 @@ def new_comment(request, listing_id):
     listing_comment.save()
     return render(request, 'auctions/listing.html', {
         "listing": listing,
-        "user": current_user,
+        "author": current_user,
         "isListingInWatchList": isListingInWatchList,
         "comments": comments
     })
@@ -195,4 +196,18 @@ def close_bid(request, listing_id):
         "isOwner": isOwner,
         "updated": True,
         "message": "Congratulations"
+    })
+
+def category(request):
+    categories = Category.objects.all()
+    return render(request, 'auctions/category.html', {
+        "categories": categories
+    }) 
+
+def listingsByCategory(request, category):
+    cat = Category.objects.get(category_name = category)
+    listingsByCategory = Listing.objects.filter(category = cat) 
+    return render(request, 'auctions/listingsByCategory.html', {
+        "category": category,
+        "listingsByCategory": listingsByCategory
     })
