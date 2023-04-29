@@ -24,7 +24,7 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, related_name="category")
     is_active = models.BooleanField(default=True)
     watchlist = models.ManyToManyField(User, blank=True, related_name="watchlistListing")
-    bid_counter = models.IntegerField(default = 1)
+    bid_counter = models.IntegerField(default = 0)
 
     def __str__(self):
         return f"{self.title}"
