@@ -3,7 +3,7 @@
   <h2>Categories</h2>
   <form action="{% url 'category' %}" method="POST">
     {% csrf_token %}
-    <ul>
+    <ul class="list-unstyled ml-4">
       {% for category in categories %} {% if category %}
       <li>
         <a href="{% url 'listingsByCategory' category %}">{{category}}</a>

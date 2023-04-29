@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <h2>Listings in {{ category }} Category</h2>
 
-  <ul>
+  <ul class="list-unstyled ml-4">
     {% if not listingsByCategory %}
     <p>No listings in this Category</p>
     {% else %} {% for listing in listingsByCategory %}
