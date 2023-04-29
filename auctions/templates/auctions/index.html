@@ -3,7 +3,9 @@
   <h2>Active Listings</h2>
 
   <div class="row mx-2">
-    {% for listing in listings %}
+    {% if not listings %}
+    <p>No Active Listings</p>
+    {% else %} {% for listing in listings %}
     <div class="card mx-2" style="width: 25rem; min-height: 30rem">
       <div class="card-body">
         <h3 lass="card-title">{{ listing.title }}</h3>
@@ -22,7 +24,7 @@
         />
       </div>
     </div>
-    {% endfor %}
+    {% endfor %} {% endif %}
   </div>
 </div>
 {% endblock %}
