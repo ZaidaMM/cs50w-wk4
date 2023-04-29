@@ -1,8 +1,12 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <div class="container-fluid">
   <h2>Watchlist</h2>
+  {% if not listings %}
+  <p>No listings in Watchlist</p>
+  {% else %}
   <div class="row mx-2">
     {% for listing in listings %}
+
     <div class="card mx-2" style="width: 25rem; min-height: 30rem">
       <div class="card-body">
         <h3 lass="card-title">{{ listing.title }}</h3>
@@ -23,5 +27,6 @@
     </div>
     {% endfor %}
   </div>
+  {% endif %}
 </div>
 {% endblock %}
